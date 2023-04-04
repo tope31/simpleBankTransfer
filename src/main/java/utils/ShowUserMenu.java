@@ -6,12 +6,11 @@ import java.util.Scanner;
 
 public class ShowUserMenu {
 
-    public static void userMenu() {
+    public static void userMenu(Users users) {
         BankUtils bankUtils = new BankUtils();
-        Users users = new Users();
         Scanner scanner = new Scanner(System.in);
         int choice = 0;
-        System.out.println("Hi chris");
+        System.out.println("Hi " + users.getUsername());
         System.out.println("Welcome to Ivory Bank");
 
 
