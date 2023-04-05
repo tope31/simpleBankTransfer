@@ -40,4 +40,34 @@ public class DBAccess implements DBAccessInterface {
         }
         return userId;
     }
+
+    @Override
+    public String retrieveUserPass(Integer userId) throws SQLException {
+        String sql = "SELECT password FROM users WHERE user_id = ?";
+        String password = "";
+
+        preparedStatement = DBConnection.getDBConnection().prepareStatement(sql);
+        preparedStatement.setInt(1, userId);
+        resultSet = preparedStatement.executeQuery();
+
+        while (resultSet.next()) {
+            password = resultSet.getString(1);
+        }
+        return password;
+    }
+
+    @Override
+    public Integer retrieveUserBalance(Integer userId) throws SQLException {
+        String sql = "SELECT balance FROM users WHERE user_id = ?";
+        Integer balance = 0;
+
+        preparedStatement = DBConnection.getDBConnection().prepareStatement(sql);
+        preparedStatement.setInt(1, userId);
+        resultSet = preparedStatement.executeQuery();
+
+        while (resultSet.next()) {
+            balance = resultSet.getInt(1);
+        }
+        return balance;
+    }
 }

@@ -14,7 +14,11 @@ public class Program {
 
         if (usernameExists) {
             Integer retrieveUserId = dbAccess.retrieveUserId(username);
+            String retrieveUserPass = dbAccess.retrieveUserPass(retrieveUserId);
+            Integer retrieveUserBalance = dbAccess.retrieveUserBalance(retrieveUserId);
             users.setUserId(retrieveUserId);
+            users.setPassword(retrieveUserPass);
+            users.setBalance(retrieveUserBalance);
             ShowUserMenu.userMenu(users);
         } else {
             System.out.println("Sorry, the username does not exist on the database.");
