@@ -37,18 +37,36 @@ public class ShowUserMenu {
                     users.setBalance(balance);
                     break;
                 case 3:
+                    //TODO exception handling
                     System.out.println("Who do you want to send it to?");
                     String receivingUsername = scanner.nextLine();
                     DBAccess dbAccess = new DBAccess();
+                    Users receivingAccount = new Users();
                     Boolean receivingUsernameExists = dbAccess.usernameDBCheck(receivingUsername);
                     if (receivingUsernameExists) {
-                        Integer retrieveUserId = dbAccess.retrieveUserId(receivingUsername);
-                        Integer retrieveUserBalance = dbAccess.retrieveUserBalance(retrieveUserId);
-                        users.setUserId(retrieveUserId);
-                        users.setBalance(retrieveUserBalance);
+                        Integer retrieveReceivingUserId = dbAccess.retrieveUserId(receivingUsername);
+                        String retrieveReceivingUserPass = dbAccess.retrieveUserPass(retrieveReceivingUserId);
+                        Integer retrieveReceivingUserBalance = dbAccess.retrieveUserBalance(retrieveReceivingUserId);
+
+                        System.out.println("How much amount?");
+                        Integer sendingAmount = scanner.nextInt();
+                        scanner.nextLine();
+
+                        receivingAccount.setUserId(retrieveReceivingUserId);
+                        receivingAccount.setUsername(receivingUsername);
+                        receivingAccount.setPassword(retrieveReceivingUserPass);
+                        receivingAccount.setBalance(retrieveReceivingUserBalance);
+
+
+                        balance = bankUtils.transferMoney(users, sendingAmount);
+
+                        users.setBalance(balance);
+
+                        Integer receivingAccountBalance = bankUtils.receiveMoney(receivingAccount, sendingAmount);
+                        receivingAccount.setBalance(receivingAccountBalance);
+
                     } else {
-                        System.out.println("Sorry, the username does not exist on the database.");
-                        System.out.println("Please contact the administrator");
+                        System.out.println("There is no registered username in the database. Please try again");
                     }
                     break;
                 case 4:
