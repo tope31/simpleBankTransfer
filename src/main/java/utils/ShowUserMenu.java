@@ -12,6 +12,7 @@ public class ShowUserMenu {
         Scanner scanner = new Scanner(System.in);
         int choice = 0;
         Integer balance;
+        Integer transactionCount;
         System.out.println("Hi " + users.getUsername());
         System.out.println("Welcome to Ivory Bank");
 
@@ -42,20 +43,22 @@ public class ShowUserMenu {
                     String receivingUsername = scanner.nextLine();
                     DBAccess dbAccess = new DBAccess();
                     Users receivingAccount = new Users();
+                    transactionCount = 0;
                     Boolean receivingUsernameExists = dbAccess.usernameDBCheck(receivingUsername);
                     if (receivingUsernameExists) {
-                        Integer retrieveReceivingUserId = dbAccess.retrieveUserId(receivingUsername);
-                        String retrieveReceivingUserPass = dbAccess.retrieveUserPass(retrieveReceivingUserId);
-                        Integer retrieveReceivingUserBalance = dbAccess.retrieveUserBalance(retrieveReceivingUserId);
-
+                        Integer retrievedReceivingUserId = dbAccess.retrieveUserId(receivingUsername);
+                        String retrievedReceivingUserPass = dbAccess.retrieveUserPass(retrievedReceivingUserId);
+                        Integer retrievedReceivingUserBalance = dbAccess.retrieveUserBalance(retrievedReceivingUserId);
+                        Integer retrievedReceivingTransactionCount = dbAccess.retrieveUserTransactionCount(retrievedReceivingUserId);
                         System.out.println("How much amount?");
                         Integer sendingAmount = scanner.nextInt();
                         scanner.nextLine();
 
-                        receivingAccount.setUserId(retrieveReceivingUserId);
+                        receivingAccount.setUserId(retrievedReceivingUserId);
                         receivingAccount.setUsername(receivingUsername);
-                        receivingAccount.setPassword(retrieveReceivingUserPass);
-                        receivingAccount.setBalance(retrieveReceivingUserBalance);
+                        receivingAccount.setPassword(retrievedReceivingUserPass);
+                        receivingAccount.setBalance(retrievedReceivingUserBalance);
+                        receivingAccount.setTransactionCount(retrievedReceivingTransactionCount);
 
 
                         balance = bankUtils.transferMoney(users, sendingAmount);
@@ -64,13 +67,24 @@ public class ShowUserMenu {
 
                         Integer receivingAccountBalance = bankUtils.receiveMoney(receivingAccount, sendingAmount);
                         receivingAccount.setBalance(receivingAccountBalance);
+                        transactionCount++;
 
+                        bankUtils.addTransactionCount(users, transactionCount);
+                        users.setTransactionCount(transactionCount);
+                        System.out.println("Transfer Successful");
                     } else {
                         System.out.println("There is no registered username in the database. Please try again");
                     }
                     break;
                 case 4:
-                    System.out.println("TBC");
+                    transactionCount = users.getTransactionCount();
+                    if (transactionCount == 0) {
+                        System.out.println("You have made no transactions right now");
+                    } else if (transactionCount == 1) {
+                        System.out.println("You have made " + transactionCount + " transaction in total.");
+                    } else {
+                        System.out.println("You have made " + transactionCount + " transactions in total.");
+                    }
                     break;
             }
         }

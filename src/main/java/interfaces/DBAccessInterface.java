@@ -10,4 +10,6 @@ public interface DBAccessInterface {
     String retrieveUserPass(Integer userId) throws SQLException;
 
     Integer retrieveUserBalance(Integer userId) throws SQLException;
+
+    Integer retrieveUserTransactionCount(Integer userId) throws SQLException;
 }

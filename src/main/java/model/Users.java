@@ -5,6 +5,7 @@ public class Users {
     private String username;
     private String password;
     private Integer balance;
+    private Integer transactionCount;
 
     public Integer getUserId() {
         return userId;
@@ -36,5 +37,13 @@ public class Users {
 
     public void setBalance(Integer balance) {
         this.balance = balance;
+    }
+
+    public Integer getTransactionCount() {
+        return transactionCount;
+    }
+
+    public void setTransactionCount(Integer transactionCount) {
+        this.transactionCount = transactionCount;
     }
 }

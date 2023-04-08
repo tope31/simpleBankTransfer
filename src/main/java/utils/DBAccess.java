@@ -70,4 +70,20 @@ public class DBAccess implements DBAccessInterface {
         }
         return balance;
     }
+
+    @Override
+    public Integer retrieveUserTransactionCount(Integer userId) throws SQLException {
+        Integer transactionCount = 0;
+
+        String sql = "SELECT num_of_transactions FROM users WHERE user_id = ?";
+
+        preparedStatement = DBConnection.getDBConnection().prepareStatement(sql);
+        preparedStatement.setInt(1, userId);
+        resultSet = preparedStatement.executeQuery();
+
+        while (resultSet.next()) {
+            transactionCount = resultSet.getInt(1);
+        }
+        return transactionCount;
+    }
 }
