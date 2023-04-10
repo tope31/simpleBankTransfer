@@ -3,16 +3,29 @@ package utils;
 import model.Users;
 
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Scanner;
 
 public class ShowUserMenu {
 
     public static void userMenu(Users users) throws SQLException {
+        LocalDateTime localDateTime = LocalDateTime.now();
+        SimpleDateFormat formatDate = new SimpleDateFormat("HH:mm a");
+
+//        System.out.println(localDate);
+//        System.out.println(localTime);
+//        DateFormat dtf = new SimpleDateFormat("MM/dd/yyyy");
+
+
+//        TransactionHistory transactionHistory = new TransactionHistory();
+//        transactionHistory.setTime(localTime.toString());
         BankUtils bankUtils = new BankUtils();
         Scanner scanner = new Scanner(System.in);
         int choice = 0;
         Integer balance;
         Integer transactionCount;
+//        timestamp.getTime();
         System.out.println("Hi " + users.getUsername());
         System.out.println("Welcome to Ivory Bank");
 

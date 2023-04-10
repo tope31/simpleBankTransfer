@@ -6,15 +6,16 @@ import model.Users;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
 public class BankUtils {
     private static PreparedStatement preparedStatement;
     private static ResultSet resultSet;
-    private static BalanceValidation balanceValidation = new BalanceValidation();
+
+    private static Timestamp timestamp;
 
     public static Integer depositBalance(Users users, Integer deposit) throws SQLException {
         Integer balance = users.getBalance() + deposit;
-
         String sql = "UPDATE users SET balance = ? WHERE user_id = ?";
 
         preparedStatement = DBConnection.getDBConnection().prepareStatement(sql);
