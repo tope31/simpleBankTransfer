@@ -1,31 +1,21 @@
 package utils;
 
+import model.TransactionHistory;
 import model.Users;
 
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.Scanner;
 
 public class ShowUserMenu {
 
     public static void userMenu(Users users) throws SQLException {
-        LocalDateTime localDateTime = LocalDateTime.now();
-        SimpleDateFormat formatDate = new SimpleDateFormat("HH:mm a");
-
-//        System.out.println(localDate);
-//        System.out.println(localTime);
-//        DateFormat dtf = new SimpleDateFormat("MM/dd/yyyy");
-
-
-//        TransactionHistory transactionHistory = new TransactionHistory();
-//        transactionHistory.setTime(localTime.toString());
         BankUtils bankUtils = new BankUtils();
+        DateTimeUtil dateTimeUtil = new DateTimeUtil();
+        TransactionHistory transactionHistory = new TransactionHistory();
         Scanner scanner = new Scanner(System.in);
-        int choice = 0;
+        Integer choice = 0;
         Integer balance;
         Integer transactionCount;
-//        timestamp.getTime();
         System.out.println("Hi " + users.getUsername());
         System.out.println("Welcome to Ivory Bank");
 
@@ -33,7 +23,7 @@ public class ShowUserMenu {
         while (choice <= 4) {
             System.out.println("------------------");
             System.out.println("Your current balance is: " + users.getBalance());
-            System.out.println("Enter 1 to Deposit\nEnter 2 to Withdraw\nEnter 3 to Transfer Money\nEnter 4 to View Transaction History");
+            System.out.println("Enter 1 to Deposit\nEnter 2 to Withdraw\nEnter 3 to Transfer Money\nEnter 4 to View Transfer History");
             choice = scanner.nextInt();
             scanner.nextLine();
 
@@ -45,6 +35,8 @@ public class ShowUserMenu {
                     users.setBalance(balance);
                     break;
                 case 2:
+                    //TODO Withdrawal Limit = 20_000
+                    //TODO Balance Limit = 100_000
                     System.out.println("Enter amount to withdraw");
                     Integer withdraw = scanner.nextInt();
                     balance = bankUtils.withdrawBalance(users, withdraw);
@@ -56,9 +48,12 @@ public class ShowUserMenu {
                     String receivingUsername = scanner.nextLine();
                     DBAccess dbAccess = new DBAccess();
                     Users receivingAccount = new Users();
+                    String date = dateTimeUtil.getCurrentDate();
+                    String time = dateTimeUtil.getCurrentTime();
                     transactionCount = 0;
                     Boolean receivingUsernameExists = dbAccess.usernameDBCheck(receivingUsername);
                     if (receivingUsernameExists) {
+                        //retrieving currentAccount Values
                         Integer retrievedReceivingUserId = dbAccess.retrieveUserId(receivingUsername);
                         String retrievedReceivingUserPass = dbAccess.retrieveUserPass(retrievedReceivingUserId);
                         Integer retrievedReceivingUserBalance = dbAccess.retrieveUserBalance(retrievedReceivingUserId);
@@ -67,6 +62,7 @@ public class ShowUserMenu {
                         Integer sendingAmount = scanner.nextInt();
                         scanner.nextLine();
 
+                        //setting receivingAccount Values
                         receivingAccount.setUserId(retrievedReceivingUserId);
                         receivingAccount.setUsername(receivingUsername);
                         receivingAccount.setPassword(retrievedReceivingUserPass);
@@ -85,11 +81,20 @@ public class ShowUserMenu {
                         bankUtils.addTransactionCount(users, transactionCount);
                         users.setTransactionCount(transactionCount);
                         System.out.println("Transfer Successful");
+
+                        //setting values on transaction history
+                        transactionHistory.setSenderId(users.getUserId());
+                        transactionHistory.setReceiverId(retrievedReceivingUserId);
+                        transactionHistory.setAmount(sendingAmount);
+                        transactionHistory.setDate(date);
+                        transactionHistory.setTime(time);
+                        bankUtils.addTransactionHistory(transactionHistory);
                     } else {
                         System.out.println("There is no registered username in the database. Please try again");
                     }
                     break;
                 case 4:
+                    Integer userId = users.getUserId();
                     transactionCount = users.getTransactionCount();
                     if (transactionCount == 0) {
                         System.out.println("You have made no transactions right now");
@@ -98,6 +103,7 @@ public class ShowUserMenu {
                     } else {
                         System.out.println("You have made " + transactionCount + " transactions in total.");
                     }
+                    bankUtils.printTransactionHistory(userId);
                     break;
             }
         }

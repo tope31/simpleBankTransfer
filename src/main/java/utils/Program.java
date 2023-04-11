@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class Program {
     public static void startProgram() throws SQLException {
         Users users = new Users();
-        users.setUsername("lem");
+        users.setUsername("chris");
         String username = users.getUsername();
         DBAccess dbAccess = new DBAccess();
         Boolean usernameExists = dbAccess.usernameDBCheck(username);
