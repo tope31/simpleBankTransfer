@@ -3,6 +3,7 @@ package utils;
 import model.TransactionHistory;
 import model.Users;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Scanner;
 
@@ -11,19 +12,22 @@ public class ShowUserMenu {
     public static void userMenu(Users users) throws SQLException {
         BankUtils bankUtils = new BankUtils();
         DateTimeUtil dateTimeUtil = new DateTimeUtil();
+        ExcelExportUtil excelExportUtil = new ExcelExportUtil();
         TransactionHistory transactionHistory = new TransactionHistory();
+        DBAccess dbAccess = new DBAccess();
         Scanner scanner = new Scanner(System.in);
         Integer choice = 0;
         Integer balance;
+        Integer userId;
         Integer transactionCount;
         System.out.println("Hi " + users.getUsername());
-        System.out.println("Welcome to Ivory Bank");
+        System.out.println("Welcome to KalemBank");
 
 
         while (choice <= 4) {
             System.out.println("------------------");
             System.out.println("Your current balance is: " + users.getBalance());
-            System.out.println("Enter 1 to Deposit\nEnter 2 to Withdraw\nEnter 3 to Transfer Money\nEnter 4 to View Transfer History");
+            System.out.println("Enter 1 to Deposit\nEnter 2 to Withdraw\nEnter 3 to Transfer Money\nEnter 4 to View Transfer History\nEnter 5 to Export Transfer History");
             choice = scanner.nextInt();
             scanner.nextLine();
 
@@ -46,7 +50,6 @@ public class ShowUserMenu {
                     //TODO exception handling
                     System.out.println("Who do you want to send it to?");
                     String receivingUsername = scanner.nextLine();
-                    DBAccess dbAccess = new DBAccess();
                     Users receivingAccount = new Users();
                     String date = dateTimeUtil.getCurrentDate();
                     String time = dateTimeUtil.getCurrentTime();
@@ -79,7 +82,6 @@ public class ShowUserMenu {
                         transactionCount++;
 
                         bankUtils.addTransactionCount(users, transactionCount);
-                        users.setTransactionCount(transactionCount);
                         System.out.println("Transfer Successful");
 
                         //setting values on transaction history
@@ -94,8 +96,8 @@ public class ShowUserMenu {
                     }
                     break;
                 case 4:
-                    Integer userId = users.getUserId();
-                    transactionCount = users.getTransactionCount();
+                    userId = users.getUserId();
+                    transactionCount = dbAccess.retrieveUserTransactionCount(userId);
                     if (transactionCount == 0) {
                         System.out.println("You have made no transactions right now");
                     } else if (transactionCount == 1) {
@@ -104,6 +106,15 @@ public class ShowUserMenu {
                         System.out.println("You have made " + transactionCount + " transactions in total.");
                     }
                     bankUtils.printTransactionHistory(userId);
+                    break;
+                case 5:
+                    userId = users.getUserId();
+                    try {
+                        excelExportUtil.exportToExcel(userId);
+                        System.out.println("Exported Successfully!");
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                     break;
             }
         }

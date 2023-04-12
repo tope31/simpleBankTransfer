@@ -125,7 +125,7 @@ public class BankUtils {
             Integer amount = resultSet.getInt("amount");
             String date = resultSet.getString("date");
             String time = resultSet.getString("time");
-            System.out.println(receiverId + " " + amount + " " + date + " " + time);
+            System.out.println("UID: " + receiverId + " Amount: " + amount + " Date: " + date + " Time: " + time);
         }
     }
 }
