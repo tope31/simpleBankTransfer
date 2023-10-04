@@ -1,16 +1,24 @@
 package utils;
 
+import dbUtils.DBAccess;
 import model.Users;
 
 import java.sql.SQLException;
+import java.util.Scanner;
 
 public class Program {
     public static void startProgram() throws SQLException {
+        //TODO add login feature
+//        Scanner scanner = new Scanner(System.in);
         Users users = new Users();
-        users.setUsername("deek");
+        // uncomment for username verification
+//        System.out.print("Please enter the username: ");
+//        String user = scanner.next();
+//        System.out.println("------------------");
+        users.setUsername("deacon");
         String username = users.getUsername();
         DBAccess dbAccess = new DBAccess();
-        Boolean usernameExists = dbAccess.usernameDBCheck(username);
+        boolean usernameExists = dbAccess.usernameDBCheck(username);
 
         if (usernameExists) {
             Integer retrievedUserId = dbAccess.retrieveUserId(username);

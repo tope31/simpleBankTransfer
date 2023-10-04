@@ -55,17 +55,17 @@ public class ExcelExportUtil {
     }
 
     private void writeDataLines(ResultSet resultSet, XSSFWorkbook workbook, XSSFSheet sheet) throws SQLException {
-        Integer rowCount = 1;
+        int rowCount = 1;
 
         while (resultSet.next()) {
-            Integer receiverId = resultSet.getInt("receiver_id");
-            Integer amount = resultSet.getInt("amount");
+            int receiverId = resultSet.getInt("receiver_id");
+            int amount = resultSet.getInt("amount");
             String date = resultSet.getString("date");
             String time = resultSet.getString("time");
 
             Row row = sheet.createRow(rowCount++);
 
-            Integer columnCount = 0;
+            int columnCount = 0;
             Cell cell = row.createCell(columnCount++);
             cell.setCellValue(receiverId);
 

@@ -1,5 +1,6 @@
 package utils;
 
+import dbUtils.DBAccess;
 import model.TransactionHistory;
 import model.Users;
 
@@ -11,12 +12,11 @@ public class ShowUserMenu {
 
     public static void userMenu(Users users) throws SQLException {
         BankUtils bankUtils = new BankUtils();
-        DateTimeUtil dateTimeUtil = new DateTimeUtil();
         ExcelExportUtil excelExportUtil = new ExcelExportUtil();
         TransactionHistory transactionHistory = new TransactionHistory();
         DBAccess dbAccess = new DBAccess();
         Scanner scanner = new Scanner(System.in);
-        Integer choice = 0;
+        int choice = 0;
         Integer balance;
         Integer userId;
         Integer transactionCount;
@@ -24,10 +24,16 @@ public class ShowUserMenu {
         System.out.println("Welcome to KalemBank");
 
 
-        while (choice <= 4) {
+        while (choice <= 5) {
             System.out.println("------------------");
             System.out.println("Your current balance is: " + users.getBalance());
-            System.out.println("Enter 1 to Deposit\nEnter 2 to Withdraw\nEnter 3 to Transfer Money\nEnter 4 to View Transfer History\nEnter 5 to Export Transfer History");
+            System.out.println("""
+                    Enter 1 to Deposit
+                    Enter 2 to Withdraw
+                    Enter 3 to Transfer Money
+                    Enter 4 to View Transfer History
+                    Enter 5 to Export Transfer History
+                    Enter 6 to quit""");
             choice = scanner.nextInt();
             scanner.nextLine();
 
@@ -51,8 +57,8 @@ public class ShowUserMenu {
                     System.out.println("Who do you want to send it to?");
                     String receivingUsername = scanner.nextLine();
                     Users receivingAccount = new Users();
-                    String date = dateTimeUtil.getCurrentDate();
-                    String time = dateTimeUtil.getCurrentTime();
+                    String date = DateTimeUtil.getCurrentDate();
+                    String time = DateTimeUtil.getCurrentTime();
                     transactionCount = 0;
                     Boolean receivingUsernameExists = dbAccess.usernameDBCheck(receivingUsername);
                     if (receivingUsernameExists) {
@@ -116,6 +122,9 @@ public class ShowUserMenu {
                         throw new RuntimeException(e);
                     }
                     break;
+                default:
+                    System.out.println("Thank you for using the system");
+                    System.exit(1);
             }
         }
     }

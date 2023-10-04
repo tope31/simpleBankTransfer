@@ -12,7 +12,7 @@ public class BankUtils {
     private static PreparedStatement preparedStatement;
     private static ResultSet resultSet;
 
-    public static Integer depositBalance(Users users, Integer deposit) throws SQLException {
+    public Integer depositBalance(Users users, Integer deposit) throws SQLException {
         Integer balance = users.getBalance() + deposit;
         String sql = "UPDATE users SET balance = ? WHERE user_id = ?";
 
@@ -27,7 +27,7 @@ public class BankUtils {
         return balance;
     }
 
-    public static Integer withdrawBalance(Users users, Integer withdraw) throws SQLException {
+    public Integer withdrawBalance(Users users, Integer withdraw) throws SQLException {
         Integer balance = users.getBalance();
         if (withdraw > balance) {
             System.out.println("The amount you wish to withdraw exceeds your current balance. Withdrawal of fund will not proceed, please try again.");
@@ -48,7 +48,7 @@ public class BankUtils {
         return balance;
     }
 
-    public static Integer transferMoney(Users users, Integer transactionMoney) throws SQLException {
+    public Integer transferMoney(Users users, Integer transactionMoney) throws SQLException {
         //TODO transferMoney logic here
         //TODO transactionCount here!
         Integer balance = users.getBalance();
@@ -68,7 +68,7 @@ public class BankUtils {
     }
 
 
-    public static Integer receiveMoney(Users users, Integer receivingMoney) throws SQLException {
+    public Integer receiveMoney(Users users, Integer receivingMoney) throws SQLException {
         Integer balance = users.getBalance() + receivingMoney;
 
         String sql = "UPDATE users SET balance = ? WHERE user_id = ?";
@@ -81,7 +81,7 @@ public class BankUtils {
         return balance;
     }
 
-    public static Integer addTransactionCount(Users users, Integer numOfTransactions) throws SQLException {
+    public Integer addTransactionCount(Users users, Integer numOfTransactions) throws SQLException {
         Integer transactionCount = users.getTransactionCount() + numOfTransactions;
 
         String sql = "UPDATE users SET num_of_transactions = ? WHERE user_id = ?";
@@ -94,7 +94,7 @@ public class BankUtils {
         return transactionCount;
     }
 
-    public static void addTransactionHistory(TransactionHistory transactionHistory) throws SQLException {
+    public void addTransactionHistory(TransactionHistory transactionHistory) throws SQLException {
         Integer senderId = transactionHistory.getSenderId();
         Integer receiverId = transactionHistory.getReceiverId();
         Integer amount = transactionHistory.getAmount();
@@ -112,7 +112,7 @@ public class BankUtils {
         preparedStatement.executeUpdate();
     }
 
-    public static void printTransactionHistory(Integer userId) throws SQLException {
+    public void printTransactionHistory(Integer userId) throws SQLException {
 
         String sql = "SELECT * FROM transaction_history WHERE sender_id = ?";
 

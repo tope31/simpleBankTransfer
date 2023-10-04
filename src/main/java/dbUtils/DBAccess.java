@@ -1,4 +1,4 @@
-package utils;
+package dbUtils;
 
 import dbConnection.DBConnection;
 import interfaces.DBAccessInterface;
@@ -13,7 +13,7 @@ public class DBAccess implements DBAccessInterface {
     @Override
     public Boolean usernameDBCheck(String username) throws SQLException {
         String sql = "SELECT username FROM users WHERE username = ?";
-        Boolean IsUsernameValid = false;
+        boolean IsUsernameValid = false;
 
         preparedStatement = DBConnection.getDBConnection().prepareStatement(sql);
         preparedStatement.setString(1, username);
@@ -29,7 +29,7 @@ public class DBAccess implements DBAccessInterface {
     @Override
     public Integer retrieveUserId(String username) throws SQLException {
         String sql = "SELECT user_id FROM users WHERE username = ?";
-        Integer userId = 0;
+        int userId = 0;
 
         preparedStatement = DBConnection.getDBConnection().prepareStatement(sql);
         preparedStatement.setString(1, username);
@@ -59,7 +59,7 @@ public class DBAccess implements DBAccessInterface {
     @Override
     public Integer retrieveUserBalance(Integer userId) throws SQLException {
         String sql = "SELECT balance FROM users WHERE user_id = ?";
-        Integer balance = 0;
+        int balance = 0;
 
         preparedStatement = DBConnection.getDBConnection().prepareStatement(sql);
         preparedStatement.setInt(1, userId);
@@ -73,7 +73,7 @@ public class DBAccess implements DBAccessInterface {
 
     @Override
     public Integer retrieveUserTransactionCount(Integer userId) throws SQLException {
-        Integer transactionCount = 0;
+        int transactionCount = 0;
 
         String sql = "SELECT num_of_transactions FROM users WHERE user_id = ?";
 
